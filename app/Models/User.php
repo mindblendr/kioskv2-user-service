@@ -8,21 +8,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTimeInterface;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasTimestamps;
-
+    use HasApiTokens, HasFactory, Notifiable, HasTimestamps, SoftDeletes;
+    protected $table = 'user';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
         'email',
-        'password',
-        'type'
+		'username',
+		'firstname',
+		'lastname',
+		'password',
+		'password_raw',
+		'pin',
+		'type',
+		'status',
     ];
 
     /**
@@ -54,5 +62,20 @@ class User extends Authenticatable
             'sub' => $this->id,
             'type' => $this->type
         ];
+    }
+
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }

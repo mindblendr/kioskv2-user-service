@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
@@ -14,7 +15,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only(['username', 'password']);
-
+        
         $user = User::where(['username' => $credentials['username']])->first();
         
         if (! Hash::check($credentials['password'], $user->password)) {
@@ -22,27 +23,60 @@ class AuthController extends Controller
         }
 
         $token = JWT::encode($user->getPayload(), config('jwt.secret'), config('jwt.algo'));
-
-        return response([$token,Redis::set($user->id, $token, 'EX', env('REDIS_TTL', 3600))]);
+        
+        Redis::set($user->id, $token, 'EX', env('REDIS_TTL', 3600));
+        return response([
+            'data' => [
+                'token'=> $token
+            ],
+            'status' => 1
+        ]);
     }
 
     public function register(Request $request)
     {
-        $user_data = $request->only([
+        $user_data = $request->only([     
+            'email',     
             'username',
-            'email',
+            'firstname',
+            'lastname',
             'password',
-            'type'
+            'password_raw',
+            'pin',
+            'type',
+            'status',
+            'login_id',
         ]);
-
+        
+        $user_data['password_raw'] = $user_data['password'];
         $user_data['password'] = Hash::make($user_data['password']);
 
         $user = User::create($user_data);
         return response($user);
     }
 
-    public function me(Request $request)
+    public function profile(Request $request)
     {
-        return response(['message' => $request->get('user_data')]);
+		$user = User::find($request->id);
+
+        $status = ($user) ? 1 : 0;
+
+		return response([
+			'data' => $user,
+			'status' => $status
+		]);
     }
+
+	public function logout(Request $request)
+	{
+        $token = explode(' ', $request->header('Authorization'))[1];
+        $decoded_token = JWT::decode($token, new Key(config('jwt.secret'), config('jwt.algo')));
+        $redis_token = Redis::del($decoded_token->sub);
+        
+        $status = ($redis_token) ? 1 : 0;
+
+		return response()->json([
+		 	'status' => $status
+		]);
+	}
 }
