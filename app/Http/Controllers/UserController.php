@@ -56,9 +56,11 @@ class UserController extends Controller
 
 		$user = $user->orderBy($sort_column, $sort_order)->paginate($limit);
 
+        $status = ($user) ? 1 : 0;
+
         return response()->json([
 			'data' => $user,
-			'status' => 1
+			'status' => $status
 		]);
 		
 	}
@@ -261,6 +263,7 @@ class UserController extends Controller
 			'status' => $status
 		]);	
 	}
+	
     private function validator(Request $request, $x)
     {
     	//custom validation error messages.
