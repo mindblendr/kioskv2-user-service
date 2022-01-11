@@ -27,7 +27,8 @@ class AuthController extends Controller
         Redis::set($user->id, $token, 'EX', env('REDIS_TTL', 3600));
         return response([
             'data' => [
-                'token'=> $token
+                'token'=> $token,
+                'type' => $user->type
             ],
             'status' => 1
         ]);
