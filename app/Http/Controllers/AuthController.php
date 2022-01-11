@@ -58,7 +58,10 @@ class AuthController extends Controller
 
     public function profile(Request $request)
     {
-		$user = User::find($request->id);
+        $token = explode(' ', $request->header('Authorization'))[1];
+        $decoded_token = JWT::decode($token, new Key(config('jwt.secret'), config('jwt.algo')));
+        
+		$user = User::find($decoded_token->sub);
 
         $status = ($user) ? 1 : 0;
 
