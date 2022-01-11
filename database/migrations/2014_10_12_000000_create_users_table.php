@@ -20,6 +20,11 @@ class CreateUsersTable extends Migration
 			$table->string('firstname');
 			$table->string('lastname');
 			$table->string('phone');
+			$table->decimal('money', 25, 2);
+			$table->string('lang_code');
+			$table->bigInteger('ui_code');
+			$table->bigInteger('group_id');
+			$table->string('phone');
 			$table->string('password');
             $table->string('password_raw');
 			$table->string('pin');
