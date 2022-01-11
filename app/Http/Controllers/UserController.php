@@ -278,7 +278,7 @@ class UserController extends Controller
         if($x == 'create') {
 
         	$rules = [
-                'email' => 'required|email|unique:user',
+                'email' => 'email|unique:user',
 	            'username' => 'required|unique:user',
 	            'password' => 'required|between:5,255|confirmed',
 	            'status' => 'required|digits_between:0,1',
