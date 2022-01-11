@@ -24,7 +24,6 @@ class CreateUsersTable extends Migration
 			$table->string('lang_code');
 			$table->bigInteger('ui_code');
 			$table->bigInteger('group_id');
-			$table->string('phone');
 			$table->string('password');
             $table->string('password_raw');
 			$table->string('pin');
