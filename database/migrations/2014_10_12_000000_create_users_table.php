@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
 			$table->string('firstname');
 			$table->string('lastname');
 			$table->string('phone');
-			$table->decimal('money', 25, 2);
-			$table->string('lang_code');
+			$table->decimal('money', 25, 2)->default(0.00);
+			$table->string('lang_code')->default('en');
 			$table->bigInteger('ui_code');
 			$table->bigInteger('group_id');
 			$table->string('password');
@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
 			$table->string('pin');
 			$table->string('type');
             $table->smallInteger('status')->default(0);
-            $table->smallInteger('streaming')->default(0);
+            $table->smallInteger('streaming')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

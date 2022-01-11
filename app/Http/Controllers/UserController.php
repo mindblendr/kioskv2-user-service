@@ -76,23 +76,29 @@ class UserController extends Controller
 			]);
 		}
 
-		$user = User::create([
-			'email' => $request->email,
-			'username' => $request->username,
-			'firstname' => $request->firstname,
-			'lastname' => $request->lastname,
-			'phone' => $request->phone,
-			'money' => $request->money,
-			'lang_code' => $request->lang_code,
-			'ui_code' => $request->ui_code,
-			'group_id' => $request->group_id,
-			'password' => Hash::make($request->password),
-			'password_raw' => $request->password,
-			'pin' => $request->pin,
-			'type' => $request->type,
-			'status' => $request->status,
-			'streaming' => $request->streaming,
-		]);
+		$user_data = $request->only([     
+            'email',     
+            'username',
+            'firstname',
+            'lastname',
+            'phone',
+            'money',
+            'lang_code',
+            'ui_code',
+            'group_id',
+            'password',
+            'password_raw',
+            'pin',
+            'type',
+            'status',
+            'login_id',
+        ]);
+        
+        $user_data['password_raw'] = $user_data['password'];
+        $user_data['password'] = Hash::make($user_data['password']);
+
+        $user = User::create($user_data);
+
 		$status = ($user) ? 1 : 0;
 
         return response()->json([
@@ -132,23 +138,28 @@ class UserController extends Controller
 			]);
 		}
 
-		$update = [
-			'email' => $request->email,
-			'username' => $request->username,
-			'firstname' => $request->firstname,
-			'lastname' => $request->lastname,
-			'phone' => $request->phone,
-			'money' => $request->money,
-			'lang_code' => $request->lang_code,
-			'ui_code' => $request->ui_code,
-			'group_id' => $request->group_id,
-			'password' => Hash::make($request->password),
-			'password_raw' => $request->password,
-			'type' => $request->type,
-			'status' => $request->status
-        ];
+		$user_data = $request->only([     
+            'email',     
+            'username',
+            'firstname',
+            'lastname',
+            'phone',
+            'money',
+            'lang_code',
+            'ui_code',
+            'group_id',
+            'password',
+            'password_raw',
+            'pin',
+            'type',
+            'status',
+            'login_id',
+        ]);
+        
+        $user_data['password_raw'] = $user_data['password'];
+        $user_data['password'] = Hash::make($user_data['password']);
 
-        $user = User::where('id', $request->id)->update($update);
+        $user = User::where('id', $request->id)->update($user_data);
 
         $status = ($user > 0) ? 1 : 0;
 
