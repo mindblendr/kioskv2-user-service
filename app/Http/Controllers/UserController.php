@@ -29,12 +29,7 @@ class UserController extends Controller
 
     public function list(Request $request)
 	{
-		$orWhere_columns = [
-            'user.username',
-            'user.status'
-        ];
-
-        $key = ($request->search_key) ? $request->search_key : '';
+        $username = ($request->username) ? $request->username : '';
 
         if($request->search_key){
             $key = $request->search_key;
@@ -44,11 +39,29 @@ class UserController extends Controller
         $sort_column = ($request->sort_column) ? $request->sort_column : 'id';
         $sort_order = ($request->sort_order) ? $request->sort_order : 'desc';
 
-		$user = User::where(function ($q) use ($orWhere_columns, $key) {
-                            foreach ($orWhere_columns as $column) {
-                                $q->orWhere($column, 'LIKE', "%{$key}%");
-                            }
-                        });
+		// $user = User::where(function ($q) use ($orWhere_columns, $key) {
+        //                     foreach ($orWhere_columns as $column) {
+        //                         $q->orWhere($column, 'LIKE', "%{$key}%");
+        //                     }
+        //                 });
+		
+		$user = User::where('username', 'like', "%{$username}%");
+
+		if($request->group_id){
+            $user = $user->where('group_id', $request->group_id);
+        }
+
+		if($request->type){
+            $user = $user->where('type', $request->type);
+        }
+
+		if($request->status){
+            $user = $user->where('status', $request->status);
+        }
+
+		if($request->streaming){
+            $user = $user->where('streaming', $request->streaming);
+        }
 
 		if($request->from && $request->to){
             $user = $user->whereBetween('created_at', [Carbon::parse($request->from)->format('Y-m-d H:i:s'), Carbon::parse($request->to)->format('Y-m-d H:i:s')]);
