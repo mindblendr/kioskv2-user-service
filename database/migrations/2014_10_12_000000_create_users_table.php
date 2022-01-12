@@ -21,6 +21,10 @@ class CreateUsersTable extends Migration
 			$table->string('lastname');
 			$table->string('phone');
 			$table->decimal('money', 25, 2)->default(0.00);
+			$table->decimal('max_bet', 25, 2)->default(0.00);
+			$table->decimal('max_draw_bet', 25, 2)->default(5000.00);
+			$table->smallInteger('board_access')->default(0);
+			$table->string('allowed_sides')->default('n');
 			$table->string('lang_code')->default('en');
 			$table->bigInteger('ui_code');
 			$table->bigInteger('group_id');
