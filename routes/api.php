@@ -39,6 +39,13 @@ Route::group([
         'middleware' => ['auth.jwt:admin'],
     ], function($router) {
         Route::group([
+            'prefix' => 'group'
+        ], function($router) {
+            Route::post('create', 'GroupController@create');
+            Route::post('update', 'GroupController@update');
+            Route::post('delete', 'GroupController@delete');
+        });
+        Route::group([
             'prefix' => 'user'
         ], function($router) {
             Route::post('get', 'UserController@get');

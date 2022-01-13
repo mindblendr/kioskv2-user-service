@@ -17,8 +17,8 @@ class UserController extends Controller
     public function get(Request $request)
     {
         $validator = $this->validator($request, 'get');
-        $user = User::find($request->id);
-        
+        $user = User::with(['group'])->find($request->id);
+
         $status = ($user) ? 1 : 0;
 
         return response()->json([
@@ -45,7 +45,7 @@ class UserController extends Controller
         //                     }
         //                 });
 		
-		$user = User::where('username', 'like', "%{$username}%");
+		$user = User::with(['group'])->where('username', 'like', "%{$username}%");
 
 		if($request->group_id){
             $user = $user->where('group_id', $request->group_id);

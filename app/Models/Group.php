@@ -12,35 +12,21 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DateTimeInterface;
 
-class User extends Authenticatable
+class Group extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasTimestamps, SoftDeletes;
-    protected $table = 'user';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'email',
-		'username',
-		'firstname',
-		'lastname',
-        'phone',
-        'money',
-        'max_bet',
-        'max_draw_bet',
-        'board_access',
-        'allowed_sides',
-        'lang_code',
-        'ui_code',
-        'group_id',
-		'password',
-		'password_raw',
-		'pin',
-		'type',
-		'status',
-    ];
+    protected $table = 'group';
+    
+	protected $fillable = [
+        'id',
+        'name',
+	];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -48,8 +34,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
     ];
 
     /**
@@ -72,12 +56,7 @@ class User extends Authenticatable
             'type' => $this->type
         ];
     }
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
-    }
-
+    
     public function getCreatedAtAttribute($date)
     {
         return Carbon::parse($date)->format('Y-m-d H:i:s');
