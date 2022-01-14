@@ -19,10 +19,12 @@ class GroupController extends Controller
 			]);
 		}
 
-		$group = Group::create([
-			'id' => $request->id,
-			'name' => $request->name
-		]);
+		$group_data = $request->only([     
+            'id',     
+            'name'
+        ]);
+
+        $group = Group::create($group_data);
 
 		$status = ($group) ? 1 : 0;
 
@@ -42,12 +44,13 @@ class GroupController extends Controller
 			]);
 		}
 
-		$update = [
-			'id' => $request->id,
-			'name' => $request->name,
-        ];
+		
+		$group_data = $request->only([     
+            'id',     
+            'name'
+        ]);
 
-        $group = Group::where('id', $request->id)->update($update);
+        $group = Group::where('id', $request->id)->update($group_data);
 
         $status = ($group > 0) ? 1 : 0;
 

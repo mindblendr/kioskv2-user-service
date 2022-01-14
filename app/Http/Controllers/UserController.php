@@ -31,19 +31,9 @@ class UserController extends Controller
 	{
         $username = ($request->username) ? $request->username : '';
 
-        if($request->search_key){
-            $key = $request->search_key;
-        }
-
         $limit = ($request->limit) ? $request->limit : 50;
         $sort_column = ($request->sort_column) ? $request->sort_column : 'id';
         $sort_order = ($request->sort_order) ? $request->sort_order : 'desc';
-
-		// $user = User::where(function ($q) use ($orWhere_columns, $key) {
-        //                     foreach ($orWhere_columns as $column) {
-        //                         $q->orWhere($column, 'LIKE', "%{$key}%");
-        //                     }
-        //                 });
 		
 		$user = User::with(['group'])->where('username', 'like', "%{$username}%");
 
