@@ -58,6 +58,7 @@ Route::group([
             Route::post('update-status', 'UserController@updateStatus');
             Route::post('update-password', 'UserController@updatePassword');
             Route::post('update-pin', 'UserController@updatePin');
+            Route::post('update-group-maxbet', 'UserController@updateGroupMaxbet');
             Route::post('delete', 'UserController@delete');
         });
     });
