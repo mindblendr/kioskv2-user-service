@@ -343,8 +343,7 @@ class UserController extends Controller
 
         	$rules = [
 	            'id' => 'required|integer',
-	            'username' => 'required|unique:user,username,' . $request->id,
-	            'status' => 'required|digits_between:0,1',
+	            'username' => 'unique:user,username,' . $request->id
 	        ];
 
         }
