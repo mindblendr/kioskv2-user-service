@@ -276,6 +276,30 @@ class UserController extends Controller
 		]);
 	}
 
+	public function updateMaxbet(Request $request)
+	{
+		$validator = $this->validator($request, 'update-maxbet');
+
+		if ($validator->fails()) {
+			return response()->json([
+				'messaage' => $validator->errors(),
+				'status' => 0
+			]);
+		}
+
+		$update = [
+			'max_bet' => $request->max_bet,
+        ];
+
+        $user = User::where('id', $request->id)->update($update);
+
+        $status = ($user > 0) ? 1 : 0;
+
+        return response()->json([
+			'status' => $status
+		]);
+	}
+
 	public function updateGroupMaxbet(Request $request)
 	{
 		$validator = $this->validator($request, 'update-group-maxbet');
@@ -390,6 +414,14 @@ class UserController extends Controller
 
         	$rules = [
 	            'group_id' => 'required|integer',
+	            'max_bet' => 'required',
+	        ];
+
+        }
+        else if($x == 'update-maxbet') {
+
+        	$rules = [
+	            'id' => 'required|integer',
 	            'max_bet' => 'required',
 	        ];
 
