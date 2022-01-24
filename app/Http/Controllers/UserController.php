@@ -27,6 +27,29 @@ class UserController extends Controller
 		]);
     }
 
+    public function confirmPin(Request $request)
+    {
+        $validator = $this->validator($request, 'confirm-pin');
+		
+		if ($validator->fails()) {
+			return response()->json([
+				'messaage' => $validator->errors(),
+				'status' => 0
+			]);
+		}
+
+        $user = User::where([
+			['type', $request->type],
+			['pin', $request->pin]
+		])->get();
+		
+        $status = (count($user)) ? 1 : 0;
+
+        return response()->json([
+			'status' => $status
+		]);
+    }
+
     public function list(Request $request)
 	{
         $username = ($request->username) ? $request->username : '';
@@ -423,6 +446,14 @@ class UserController extends Controller
         	$rules = [
 	            'id' => 'required|integer',
 	            'max_bet' => 'required',
+	        ];
+
+        }
+        else if($x == 'confirm-pin') {
+
+        	$rules = [
+	            'type' => 'required',
+	            'pin' => 'required',
 	        ];
 
         }

@@ -53,6 +53,7 @@ Route::group([
             Route::post('details', 'UserController@details');
             Route::post('create', 'UserController@create');
             Route::post('edit', 'UserController@edit');
+            Route::post('confirm-pin', 'UserController@confirmPin');
             Route::post('update', 'UserController@update');
             Route::post('update-streaming', 'UserController@updateStreaming');
             Route::post('update-status', 'UserController@updateStatus');
